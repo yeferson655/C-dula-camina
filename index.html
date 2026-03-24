@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cédula de Identidad Canina Completa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Roboto:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #fdfcf0;
+        }
+
+        .dog-card {
+            width: 450px;
+            height: 280px;
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border-radius: 15px;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(180, 83, 9, 0.15);
+            overflow: hidden;
+            border: 2px solid #d97706;
+            flex-shrink: 0;
+        }
+
+        .card-pattern {
+            position: absolute;
+            inset: 0;
+            opacity: 0.05;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%23d97706' d='M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8z'/%3E%3C/svg%3E");
+            background-size: 30px 30px;
+            pointer-events: none;
+        }
+
+        .header-dog {
+            height: 45px;
+            background: #d97706;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            color: white;
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        .photo-frame {
+            width: 110px;
+            height: 130px;
+            border: 3px solid #f59e0b;
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qr-frame {
+            width: 100px;
+            height: 100px;
+            border: 2px solid #d97706;
+            background: white;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .photo-frame img, .qr-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .label-dog {
+            font-size: 8px;
+            color: #92400e;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: -1px;
+        }
+
+        .value-dog {
+            font-size: 13px;
+            color: #451a03;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        .barcode-sim {
+            height: 30px;
+            background: repeating-linear-gradient(90deg, #451a03, #451a03 1px, transparent 1px, transparent 3px);
+            width: 100%;
+            opacity: 0.7;
+        }
+
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white; padding: 0; }
+            .dog-card { margin: 10px auto; border: 1px solid #d97706; box-shadow: none; break-inside: avoid; }
+        }
+    </style>
+</head>
+<body class="p-4 flex flex-col items-center">
+
+    <div class="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-2 gap-8">
+        
+        <!-- PANEL DE CONTROL -->
+        <div class="no-print space-y-4 bg-white p-6 rounded-2xl shadow-xl border border-orange-100 h-fit">
+            <h2 class="text-xl font-bold text-orange-700 flex items-center gap-2">
+                <span>🐕</span> Editor de Identidad
+            </h2>
+            
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-orange-50 p-3 rounded-lg border border-orange-200">
+                    <label class="block text-[10px] font-bold text-orange-800 mb-1">FOTO MASCOTA</label>
+                    <input type="file" id="in-photo" accept="image/*" class="w-full text-[10px] cursor-pointer">
+                </div>
+                <div class="bg-orange-50 p-3 rounded-lg border border-orange-200">
+                    <label class="block text-[10px] font-bold text-orange-800 mb-1">FOTO CÓDIGO QR</label>
+                    <input type="file" id="in-qr" accept="image/*" class="w-full text-[10px] cursor-pointer">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <input type="text" id="in-nombre" placeholder="Nombre" class="border rounded p-2 text-sm">
+                <input type="text" id="in-raza" placeholder="Raza" class="border rounded p-2 text-sm">
+                <input type="text" id="in-fecha" placeholder="Nacimiento" class="border rounded p-2 text-sm">
+                <select id="in-sexo" class="border rounded p-2 text-sm">
+                    <option value="MACHO">Macho</option>
+                    <option value="HEMBRA">Hembra</option>
+                </select>
+            </div>
+
+            <input type="text" id="in-humano" placeholder="Nombre del Humano Responsable" class="w-full border rounded p-2 text-sm">
+            <input type="text" id="in-dir" placeholder="Dirección de Casa (Para el reverso)" class="w-full border rounded p-2 text-sm">
+
+            <div class="flex gap-2 pt-2">
+                <button onclick="window.print()" class="flex-1 bg-orange-600 text-white font-bold py-3 rounded-xl hover:bg-orange-700 transition shadow-lg uppercase text-xs tracking-widest">
+                    Imprimir Cédula
+                </button>
+            </div>
+        </div>
+
+        <!-- VISTA PREVIA -->
+        <div class="flex flex-col gap-8 items-center">
+            
+            <!-- ANVERSO -->
+            <div class="dog-card">
+                <div class="card-pattern"></div>
+                <div class="header-dog">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xl">🐾</span>
+                        <div class="leading-none">
+                            <p class="text-[10px] font-bold uppercase">República Perruna</p>
+                            <p class="text-[7px] opacity-80 uppercase">Registro Nacional de Mascotas</p>
+                        </div>
+                    </div>
+                    <span class="ml-auto text-[8px] font-bold bg-white text-orange-700 px-2 py-1 rounded">ANVERSO</span>
+                </div>
+
+                <div class="p-4 flex gap-5">
+                    <div class="photo-frame shadow-sm">
+                        <img id="out-photo" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23fef3c7'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'%3E%3C/path%3E%3C/svg%3E" alt="Foto">
+                    </div>
+                    <div class="flex-1 space-y-2">
+                        <div><p class="label-dog">Nombre</p><p class="value-dog" id="out-nombre">FIRULAIS</p></div>
+                        <div><p class="label-dog">Raza</p><p class="value-dog text-[10px]" id="out-raza">CRIOLLO</p></div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div><p class="label-dog">Nacimiento</p><p class="text-[9px] font-bold" id="out-fecha">--/--/----</p></div>
+                            <div><p class="label-dog">Sexo</p><p class="text-[9px] font-bold" id="out-sexo">MACHO</p></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute bottom-3 left-4 right-4 border-t border-orange-200 pt-1">
+                    <p class="label-dog">Humano</p>
+                    <p class="text-[9px] font-bold" id="out-humano">-- REGISTRO PENDIENTE --</p>
+                </div>
+            </div>
+
+            <!-- REVERSO -->
+            <div class="dog-card">
+                <div class="card-pattern"></div>
+                <div class="header-dog bg-orange-800">
+                    <span class="text-[10px] font-bold uppercase">Información de Contacto y Seguridad</span>
+                    <span class="ml-auto text-[8px] font-bold bg-white text-orange-800 px-2 py-1 rounded">REVERSO</span>
+                </div>
+
+                <div class="p-5 flex justify-between items-start">
+                    <div class="w-2/3 space-y-4">
+                        <div>
+                            <p class="label-dog">Dirección de Residencia</p>
+                            <p class="text-[10px] font-medium leading-tight" id="out-dir">Añade la dirección para que pueda volver a casa si se pierde.</p>
+                        </div>
+                        <div class="pt-2">
+                            <p class="text-[7px] text-orange-800 leading-tight italic">
+                                "Si me encuentras solo, por favor escanea el código QR para contactar a mi familia. Soy muy amigable y probablemente tenga hambre."
+                            </p>
+                        </div>
+                        <div class="pt-2">
+                            <div class="barcode-sim"></div>
+                            <p class="text-[7px] font-mono text-center">🐾 770123456789 🐾</p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col items-center">
+                        <div class="qr-frame shadow-md mb-1">
+                            <img id="out-qr" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23fef3c7'%3E%3Cpath d='M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm13-2h3v2h-3v-2zm-3 0h2v2h-2v-2zm3 3h3v2h-3v-2zm-3 0h2v2h-2v-2zm3 3h3v2h-3v-2zm-3 0h2v2h-2v-2z'/%3E%3C/svg%3E" alt="QR">
+                        </div>
+                        <p class="text-[7px] font-bold uppercase text-orange-800">Escanéame</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sincronización de campos de texto
+        const inputs = [
+            { id: 'in-nombre', out: 'out-nombre' },
+            { id: 'in-raza', out: 'out-raza' },
+            { id: 'in-fecha', out: 'out-fecha' },
+            { id: 'in-sexo', out: 'out-sexo' },
+            { id: 'in-humano', out: 'out-humano', placeholder: '-- REGISTRO PENDIENTE --' },
+            { id: 'in-dir', out: 'out-dir', placeholder: 'Sin dirección registrada.' }
+        ];
+
+        inputs.forEach(field => {
+            const inEl = document.getElementById(field.id);
+            const outEl = document.getElementById(field.out);
+            inEl.addEventListener('input', () => {
+                outEl.innerText = inEl.value.toUpperCase() || field.placeholder || '--';
+            });
+        });
+
+        // Carga de Fotos (Mascota y QR)
+        function setupImageUpload(inputId, outputId) {
+            document.getElementById(inputId).addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        document.getElementById(outputId).src = event.target.result;
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        setupImageUpload('in-photo', 'out-photo');
+        setupImageUpload('in-qr', 'out-qr');
+    </script>
+</body>
+</html>
+
